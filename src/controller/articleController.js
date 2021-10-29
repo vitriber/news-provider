@@ -1,4 +1,4 @@
-const Article = require('../models/Article');
+const Article = require('../models/article');
 
 module.exports = {
   async index(req, res, next) {
@@ -34,6 +34,19 @@ module.exports = {
     }
   },
 
+  async createArticle(req, res, next) {
+    try {
+      const newArticle = req.body;
+
+      await Article.query().insert(newArticle);
+
+      return res.status(201).send();
+
+    } catch (error) {
+      next(error);
+    }
+  },
+
   async getArticleById(req, res, next) {
     
     const { id } = req.params
@@ -50,20 +63,6 @@ module.exports = {
 
     return res.send(results);
   },
-
-  async createArticle(req, res, next) {
-    try {
-      const newArticle = req.body;
-
-      await Article.query().insert(newArticle);
-
-      return res.status(201).send();
-
-    } catch (error) {
-      next(error);
-    }
-  },
-
 
   async updateArticle(req, res, next) {
     try {
@@ -97,7 +96,5 @@ module.exports = {
       next(error);
     }
   }
-
-
 
 }

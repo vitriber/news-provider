@@ -1,29 +1,29 @@
-import {Router} from Express;
-const app = Router();
-const UserController = require('./controllers/UserController');
-const ArticleController = require('./controllers/ArticleController');
-const AuthorController = require('./controllers/AuthorController');
-const AuthenticationService = require('./services/auth')
+const express = require('express');
+const app = express.Router();
+const userController = require('../controller/userController');
+const articleController = require('../controller/articleController');
+const authorController = require('../controller/authorController');
+const authenticationService = require('../services/auth');
 
-app.post('/sign-up', UserController.singUp)
-app.post('/login', AuthenticationService.login)
+app.post('/sign-up', userController.singUp)
+app.post('/login', authenticationService.login)
 
-app.get('/users', UserController.index)
-app.get('/users/:id', UserController.getById)
-app.put('/users/:id', AuthenticationService.authorizeAdmin, UserController.updateUser)
-app.delete('/users/:id', AuthenticationService.authorizeAdmin, UserController.deleteUser)
+app.get('/users', userController.index)
+app.get('/users/:id', userController.getById)
+app.put('/users/:id', authenticationService.authorizeAdmin, userController.updateUser)
+app.delete('/users/:id', authenticationService.authorizeAdmin, userController.deleteUser)
 
 //Routes authors
-app.get('/admin/authors', AuthenticationService.authorizeAdmin, AuthorController.index)
-app.get('/admin/authors/:id', AuthenticationService.authorizeAdmin, AuthorController.getAuthorById)
-app.post('/admin/authors', AuthenticationService.authorizeAdmin, AuthorController.createAuthor)
-app.put('/admin/authors/:id', AuthenticationService.authorizeAdmin, AuthorController.updateAuthor)
-app.delete('/admin/authors/:id', AuthenticationService.authorizeAdmin, AuthorController.deleteAuthor)
+app.get('/admin/authors', authenticationService.authorizeAdmin, authorController.index)
+app.get('/admin/authors/:id', authenticationService.authorizeAdmin, authorController.getAuthorById)
+app.post('/admin/authors', authenticationService.authorizeAdmin, authorController.createAuthor)
+app.put('/admin/authors/:id', authenticationService.authorizeAdmin, authorController.updateAuthor)
+app.delete('/admin/authors/:id', authenticationService.authorizeAdmin, authorController.deleteAuthor)
 
 // Routes articles
-app.get('/articles/:id', AuthenticationService.authorizeLogin, ArticleController.getArticleById)
-app.post('/admin/articles', AuthenticationService.authorizeAdmin, ArticleController.createArticle)
-app.put('/admin/articles', AuthenticationService.authorizeAdmin, ArticleController.updateArticle)
-app.delete('/admin/articles', AuthenticationService.authorizeAdmin, ArticleController.deleteArticle)
+app.get('/articles/:id', authenticationService.authorizeLogin, articleController.getArticleById)
+app.post('/admin/articles', authenticationService.authorizeAdmin, articleController.createArticle)
+app.put('/admin/articles', authenticationService.authorizeAdmin, articleController.updateArticle)
+app.delete('/admin/articles', authenticationService.authorizeAdmin, articleController.deleteArticle)
 
-export default app;
+module.exports = app;
